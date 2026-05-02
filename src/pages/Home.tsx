@@ -1,14 +1,228 @@
+import { useState, useEffect, useCallback } from 'react';
 import { motion } from 'motion/react';
-import { Sparkles, Layers } from 'lucide-react';
+import { Sparkles, Layers, ChevronLeft, ChevronRight, Plus, Minus } from 'lucide-react';
 
 interface HomeProps {
   onNavigate: (view: 'services' | 'consultation') => void;
 }
 
+const slides = [
+  {
+    image: '/navi-aari-project/aari-2.png',
+    alt: 'Aari embroidery work',
+    heading: <>Elegant<br /><em>Aari Work</em></>,
+   btns: [
+      // { label: 'Gallery', href: '#', onClick: () => {} },
+    ],
+  },
+  {
+    image: '/navi-aari-project/saree-1.png',
+    alt: 'Saree pre-plating draping',
+    heading: <>Ready to<br /><em>Drape & Shine</em></>,
+    btns: [
+      // { label: 'WhatsApp Us', href: 'https://wa.me/919952384485', onClick: undefined }
+    ],
+  },
+  {
+    image: '/navi-aari-project/aari-1.png',
+    alt: 'Blouse embroidery handwork',
+    heading: <>Bridal<br /><em>Handwork</em></>,
+    btns: [
+      // { label: 'Explore Services', href: '#', onClick: () => {} },
+    ],
+  },
+  {
+    image: '/navi-aari-project/cone-1.png',
+    alt: 'Mehndi design on hands',
+    heading: <>Learn the<br /><em>Ancient Art</em></>,
+    btns: [
+      // { label: 'Enroll Now – ₹3,500', href: 'https://wa.me/919952384485', onClick: undefined },
+    ],
+  },
+];
+
+const faqItems = [
+  {
+    q: 'What is Aari embroidery and how is it done?',
+    a: 'Aari embroidery is a traditional Indian needlework technique originating from Mughal artisans. A specialized hooked needle (the "Aari") is used to create intricate patterns on fabric stretched across a frame. At Navi Aari Work, we use authentic techniques with premium silk and zardosi threads to create stunning designs on sarees, blouses, lehengas, and dupattas.',
+  },
+  {
+    q: 'What is your pricing for custom Aari work?',
+    a: 'Our pricing starts from ₹500 for simple work and varies based on complexity, design intricacy, type of thread (silk, zardosi, stone work), fabric type, and area of coverage. Bridal blouse work typically ranges from ₹1,500 to ₹8,000+. Saree border work starts at ₹2,000. We provide a detailed quote after seeing your design requirements. Contact us via WhatsApp or phone for a free consultation.',
+  },
+  {
+    q: 'How long does it take to complete a custom order?',
+    a: 'Delivery time depends on the complexity and quantity of work. Simple blouse designs take 3–5 days. Elaborate bridal pieces may take 2–4 weeks. Saree pre-plating is typically done same-day or next-day. We always confirm the timeline before accepting an order and keep you updated throughout. For urgent needs, express service may be available — please call us directly.',
+  },
+  {
+    q: 'Do you offer customization with my own design?',
+    a: 'Absolutely! We specialize in bespoke, custom designs. You can share your design ideas via reference photos on WhatsApp or Instagram. Our artisans will sketch the design, get your approval, and then bring it to life with the finest Aari technique. No design is too complex — we love creative challenges!',
+  },
+  {
+    q: 'What fabrics do you work with?',
+    a: 'We work with all premium fabrics including pure silk (Kanjivaram, Banarasi), georgette, chiffon, organza, raw silk, velvet, and cotton. The Aari technique adapts beautifully to each fabric type. For pre-plating, we handle all varieties including tissue silk, net sarees, and heavy bridal silk.',
+  },
+  {
+    q: 'How should I care for my Aari embroidered garment?',
+    a: 'Always dry-clean Aari embroidered garments. Avoid wringing or twisting the fabric. Store folded or rolled (not hung) in muslin or cotton cloth — never in plastic. Keep away from direct sunlight and moisture. Iron on reverse side at low heat with a cloth between the iron and embroidery. With proper care, your Aari work will last for generations.',
+  },
+  {
+    q: 'Can I enroll in your Aari embroidery classes?',
+    a: 'Yes! Our next batch (2026) commences May 1, 2026. The 3-month certification course covers basic to advanced Aari techniques, design planning, colour theory, and finishing skills. Course fee is ₹3,500 (offer price). Limited seats available. You\'ll receive a professional certificate upon successful completion. Contact us via Instagram @navi_aari_18 or call 9952384485 to secure your slot.',
+  },
+];
+
+function Carousel() {
+  const [current, setCurrent] = useState(0);
+
+  const next = useCallback(() => setCurrent(c => (c + 1) % slides.length), []);
+  const prev = useCallback(() => setCurrent(c => (c - 1 + slides.length) % slides.length), []);
+
+  useEffect(() => {
+    const timer = setInterval(next, 8000);
+    return () => clearInterval(timer);
+  }, [next]);
+
+  const slide = slides[current];
+
+  return (
+    <div className="relative w-full overflow-hidden bg-black" style={{ height: 'calc(100vh - 80px)', minHeight: '480px' }}>
+      {/* Slides */}
+      {slides.map((s, i) => (
+        <div
+          key={i}
+          className="absolute inset-0 transition-opacity duration-700"
+          style={{ opacity: i === current ? 1 : 0, zIndex: i === current ? 1 : 0 }}
+        >
+          <img
+            src={s.image}
+            alt={s.alt}
+            loading={i === 0 ? 'eager' : 'lazy'}
+            className="w-full h-full object-cover"
+          />
+          <div className="absolute inset-0 bg-black/50" />
+        </div>
+      ))}
+
+      {/* Content */}
+      <div className="absolute inset-0 z-10 flex items-center px-8 md:px-20">
+        <div className="max-w-2xl text-white">
+          <h1 className="text-5xl md:text-7xl font-serif font-bold leading-tight mb-6 [&_em]:font-bold [&_em]:italic">
+            {slide.heading}
+          </h1>
+          <div className="flex flex-wrap gap-4">
+            {slide.btns.map((btn, bi) => (
+              <a
+                key={bi}
+                href={btn.href}
+                target={btn.href.startsWith('http') ? '_blank' : undefined}
+                rel={btn.href.startsWith('http') ? 'noopener noreferrer' : undefined}
+                onClick={btn.onClick}
+                className={
+                  bi === 0
+                    ? 'bg-white text-black font-bold px-8 py-3 rounded-full hover:bg-white/90 transition-all text-sm uppercase tracking-widest'
+                    : 'border border-white text-white font-bold px-8 py-3 rounded-full hover:bg-white/10 transition-all text-sm uppercase tracking-widest'
+                }
+              >
+                {btn.label}
+              </a>
+            ))}
+          </div>
+        </div>
+      </div>
+
+      {/* Arrow Buttons */}
+      <button
+        onClick={prev}
+        className="absolute left-4 top-1/2 -translate-y-1/2 z-20 w-12 h-12 rounded-full bg-white/20 hover:bg-white/40 backdrop-blur-sm flex items-center justify-center text-white transition-all"
+        aria-label="Previous slide"
+      >
+        <ChevronLeft className="w-6 h-6" />
+      </button>
+      <button
+        onClick={next}
+        className="absolute right-4 top-1/2 -translate-y-1/2 z-20 w-12 h-12 rounded-full bg-white/20 hover:bg-white/40 backdrop-blur-sm flex items-center justify-center text-white transition-all"
+        aria-label="Next slide"
+      >
+        <ChevronRight className="w-6 h-6" />
+      </button>
+
+      {/* Dot Indicators */}
+      <div className="absolute bottom-6 left-1/2 -translate-x-1/2 z-20 flex gap-3">
+        {slides.map((_, i) => (
+          <button
+            key={i}
+            onClick={() => setCurrent(i)}
+            className={`rounded-full transition-all duration-300 ${
+              i === current ? 'w-8 h-2 bg-white' : 'w-2 h-2 bg-white/50'
+            }`}
+            aria-label={`Go to slide ${i + 1}`}
+          />
+        ))}
+      </div>
+    </div>
+  );
+}
+
+function FAQ() {
+  const [openIndex, setOpenIndex] = useState<number | null>(null);
+
+  const toggle = (i: number) => setOpenIndex(prev => (prev === i ? null : i));
+
+  return (
+    <section className="py-24 px-6 md:px-12">
+      <div className="max-w-3xl mx-auto">
+        <div className="text-center mb-12">
+          <span className="text-xs uppercase tracking-widest text-secondary font-bold">Frequently Asked Questions</span>
+          <h2 className="text-4xl md:text-5xl text-primary mt-3">
+            Everything You <em className="font-bold italic">Need to Know</em>
+          </h2>
+        </div>
+
+        {/* Ornament */}
+        <div className="flex items-center gap-4 mb-10">
+          <div className="flex-1 h-px bg-outline-variant" />
+          <span className="text-secondary">✦</span>
+          <div className="flex-1 h-px bg-outline-variant" />
+        </div>
+
+        <div className="space-y-3">
+          {faqItems.map((item, i) => (
+            <div
+              key={i}
+              className="border border-outline-variant rounded-2xl overflow-hidden"
+            >
+              <button
+                className="w-full flex items-center justify-between px-6 py-5 text-left bg-white hover:bg-surface-container transition-colors"
+                onClick={() => toggle(i)}
+                aria-expanded={openIndex === i}
+              >
+                <span className="font-semibold text-primary pr-4">{item.q}</span>
+                {openIndex === i
+                  ? <Minus className="w-5 h-5 text-secondary flex-shrink-0" />
+                  : <Plus className="w-5 h-5 text-secondary flex-shrink-0" />
+                }
+              </button>
+              {openIndex === i && (
+                <div className="px-6 pb-5 pt-2 text-on-surface-variant font-bold leading-relaxed bg-white text-sm">
+                  {item.a}
+                </div>
+              )}
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}
+
 export default function Home({ onNavigate }: HomeProps) {
   return (
-    <div className="overflow-x-hidden space-y-32 pb-32">
-      {/* Hero Section */}
+    <div className="overflow-x-hidden  pt-20">
+      {/* Carousel Hero */}
+      <Carousel />
+
+      {/* Original Hero Section */}
       <section className="relative min-h-screen flex items-center pt-24 overflow-hidden">
         <div className="absolute inset-0 z-0">
           <img
@@ -41,12 +255,12 @@ export default function Home({ onNavigate }: HomeProps) {
 
             {/* Logo Accent */}
             <div className="mb-6 opacity-80 group">
-              <img src="logo.png" alt="" className="w-24 h-24 object-contain grayscale-[0.2] hover:grayscale-0 transition-all duration-1000" />
+              <img src="logo_new-removebg-preview.png" alt="" className="w-24 h-24 object-contain grayscale-[0.2] hover:grayscale-0 transition-all duration-1000" />
             </div>
 
             <h1 className="text-7xl md:text-9xl text-primary leading-[0.85] mb-10 tracking-tight">
               Navi <br />
-              <span className="italic font-light serif text-primary/90">Aari Work</span>
+              <span className="italic font-bold serif text-primary/90">Aari Work</span>
             </h1>
 
             <div className="relative mb-12">
@@ -101,7 +315,7 @@ export default function Home({ onNavigate }: HomeProps) {
           </motion.div>
 
           {/* Overlapping Image Grid */}
-          <div className="relative hidden lg:block h-[600px]">
+          <div className="relative lg:block h-[600px]">
             <motion.div
               initial={{ opacity: 0, scale: 0.9, rotate: -5 }}
               animate={{ opacity: 1, scale: 1, rotate: -2 }}
@@ -132,23 +346,23 @@ export default function Home({ onNavigate }: HomeProps) {
             <span className="text-9xl font-serif font-black text-primary/5 absolute -top-12 -left-8 pointer-events-none">Expertise</span>
             <h2 className="text-5xl md:text-6xl text-primary leading-tight mb-12 relative z-10">
               The Path to <br />
-              <span className="italic font-light serif">Mastery</span>
+              <span className="italic font-bold serif">Mastery</span>
             </h2>
             <div className="space-y-10 relative z-10">
               <div className="group transition-all">
                 <span className="text-secondary font-bold text-xs tracking-widest mr-4">01.</span>
                 <h3 className="text-2xl font-serif inline-block group-hover:translate-x-2 transition-transform">Traditional Needle-work</h3>
-                <p className="mt-4 text-on-surface-variant font-light leading-relaxed max-w-sm">Authentic Mughal techniques using hand-turned Aari needles for structural precision.</p>
+                <p className="mt-4 text-on-surface-variant font-bold leading-relaxed max-w-sm">Authentic Mughal techniques using hand-turned Aari needles for structural precision.</p>
               </div>
               <div className="group transition-all">
                 <span className="text-secondary font-bold text-xs tracking-widest mr-4">02.</span>
                 <h3 className="text-2xl font-serif inline-block group-hover:translate-x-2 transition-transform">Bespoke Design</h3>
-                <p className="mt-4 text-on-surface-variant font-light leading-relaxed max-w-sm">From bridal vision to thread-work reality, every piece is uniquely yours.</p>
+                <p className="mt-4 text-on-surface-variant font-bold leading-relaxed max-w-sm">From bridal vision to thread-work reality, every piece is uniquely yours.</p>
               </div>
               <div className="group transition-all">
                 <span className="text-secondary font-bold text-xs tracking-widest mr-4">03.</span>
                 <h3 className="text-2xl font-serif inline-block group-hover:translate-x-2 transition-transform">Artisan Academy</h3>
-                <p className="mt-4 text-on-surface-variant font-light leading-relaxed max-w-sm">Professional coaching for aspiring designers and embroidery artists.</p>
+                <p className="mt-4 text-on-surface-variant font-bold leading-relaxed max-w-sm">Professional coaching for aspiring designers and embroidery artists.</p>
               </div>
             </div>
           </div>
@@ -165,7 +379,7 @@ export default function Home({ onNavigate }: HomeProps) {
                   <Sparkles className="w-6 h-6" />
                 </div>
                 <h4 className="text-2xl font-bold text-primary mb-4">Aari Classes</h4>
-                <p className="text-on-surface-variant text-sm font-light mb-8 italic">Certification included upon successful completion of the internship.</p>
+                <p className="text-on-surface-variant text-sm font-bold mb-8 italic">Certification included upon successful completion of the internship.</p>
                 <div className="flex flex-col gap-2">
                   <span className="text-xs uppercase tracking-widest text-on-surface-variant/60">Limited Slots</span>
                   <span className="text-3xl font-serif text-secondary">₹3,500</span>
@@ -180,7 +394,7 @@ export default function Home({ onNavigate }: HomeProps) {
                   <Layers className="w-6 h-6" />
                 </div>
                 <h4 className="text-2xl font-bold mb-4">Pre-plating</h4>
-                <p className="text-white/70 text-sm font-light mb-8 italic">Ready to wear in under 30 seconds. Professional folding for all silks.</p>
+                <p className="text-white/70 text-sm font-bold mb-8 italic">Ready to wear in under 30 seconds. Professional folding for all silks.</p>
                 <div className="flex flex-col gap-2">
                   <span className="text-xs uppercase tracking-widest text-white/40">Opening Offer</span>
                   <span className="text-3xl font-serif text-secondary-container">₹500</span>
@@ -188,25 +402,28 @@ export default function Home({ onNavigate }: HomeProps) {
               </motion.div>
             </div>
 
-            <div className="bg-surface-container p-8 rounded-2xl flex items-center gap-6">
+            {/* <div className="bg-surface-container p-8 rounded-2xl flex items-center gap-6">
               <div className="flex -space-x-4">
                 {[1, 2, 3, 4].map(i => (
                   <div key={i} className="w-10 h-10 rounded-full border-2 border-surface-container bg-stone-300" />
                 ))}
               </div>
-              <p className="text-sm font-light text-on-surface-variant">Join <span className="font-bold text-primary">150+ students</span> who graduated from our academy.</p>
-            </div>
+              <p className="text-sm font-bold text-on-surface-variant">Join <span className="font-bold text-primary">150+ students</span> who graduated from our academy.</p>
+            </div> */}
           </div>
         </div>
       </section>
+
+      {/* FAQ Section */}
+      <FAQ />
 
       {/* Gallery Highlight */}
       <section className="bg-surface-container py-32 overflow-hidden">
         <div className="container mx-auto px-6 md:px-12">
           <div className="flex justify-between items-end mb-16">
             <div>
-              <h2 className="text-4xl md:text-5xl text-primary mb-4">Portfolio <span className="italic font-light serif text-primary/70">Showcase</span></h2>
-              <p className="text-on-surface-variant font-light underline decoration-secondary underline-offset-8">Exotic patterns across premium fabrics</p>
+              <h2 className="text-4xl md:text-5xl text-primary mb-4">Portfolio <span className="italic font-bold serif text-primary/70">Showcase</span></h2>
+              <p className="text-on-surface-variant font-bold underline decoration-secondary underline-offset-8">Exotic patterns across premium fabrics</p>
             </div>
             <button
               onClick={() => onNavigate('services')}
