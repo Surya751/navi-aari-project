@@ -91,7 +91,7 @@ export default function Consultation() {
   <div>
     <p className="font-bold text-primary">Location</p>
     <p className="text-on-surface-variant">
-      Chennai, Tamil Nadu
+      JAMBUNATHAPURAM, MUSIRI TK, TRICHY DT
     </p>
   </div>
 </div>
