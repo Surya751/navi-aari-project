@@ -5,7 +5,7 @@ import Consultation from './pages/Consultation';
 import Process from './pages/Process';
 import { View, Service } from './types';
 import { motion, AnimatePresence } from 'motion/react';
-import { Camera, Mail, MapPin, Phone } from 'lucide-react';
+import { Instagram, Mail, MapPin, Phone } from 'lucide-react';
 
 export default function App() {
   const [currentView, setCurrentView] = useState<View>('home');
@@ -110,6 +110,7 @@ export default function App() {
         </AnimatePresence>
       </div>
 
+      {/* Footer */}
       <footer
         className="w-full py-16 px-6 md:px-12 bg-cover bg-center relative"
         style={{ backgroundImage: "url('/navi-aari-project/footer_img.png')" }}
@@ -177,13 +178,13 @@ export default function App() {
               rel="noopener noreferrer"
               className="flex items-center gap-2 hover:text-primary transition-colors"
             >
-              <Camera className="w-4 h-4 text-secondary" />
+              <Instagram className="w-4 h-4 text-secondary" />
               @navi_aari_18
             </a>
 
             <span className="flex items-center gap-2">
               <MapPin className="w-4 h-4 text-secondary" />
-              JAMBUNATHAPURAM, Musiri
+              JAMBUNATHAPURAM, MUSIRI TK, TRICHY DT
             </span>
           </div>
 
